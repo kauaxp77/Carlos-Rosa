@@ -1,0 +1,22 @@
+# Node, Build, Environments
+node_modules/
+dist/
+.env
+.env.*.local
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Java/Spring Boot
+target/
+*.class
+*.jar
+*.war
+.mvn/
+
+# Docker overrides
+docker-compose.override.yml

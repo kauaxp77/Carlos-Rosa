@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: carlos-rosa-platform
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:carlos_rosa_db}?useSSL=false&serverTimezone=UTC
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate # Em prod usar validate, Flyway cuida da criação
+    show-sql: false # Mudar via var ambiente p/ dev se precisar debugar
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+# Variáveis Customizadas (Carregadas por ENV vars via Docker)
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:SUA_CHAVE_COMPLEXA_COM_PELO_MENOS_256_BITS_PARA_O_HMAC_SHA_DEVE_FICAR_NAS_VARS_DE_AMBIENTE}
+      expiration-ms: 3600000 # 1 Hora para access tokens
+      refresh-expiration-ms: 604800000 # 7 Dias para refresh tokens
+  aws:
+    s3:
+      bucket-name: ${S3_BUCKET_NAME:carlos-rosa-media-stg}
+      region: ${S3_REGION:sa-east-1}
+
+server:
+  port: 8080
+  error:
+    include-stacktrace: never # Security compliance: nunca vaze stacktrace no body
+    include-message: always
