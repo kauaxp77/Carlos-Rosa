@@ -26,6 +26,9 @@ public class MediaController {
     @Value("${app.aws.s3.region}")
     private String regionString;
 
+    @Value("${app.aws.s3.endpoint:#{null}}")
+    private String endpointUrl;
+
     @GetMapping("/presigned-url")
     @PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
     public ResponseEntity<Map<String, String>> generatePreSignedUrl(@RequestParam String filename,
@@ -42,26 +45,32 @@ public class MediaController {
                 + filename.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
 
         Region region = Region.of(regionString);
-        try (S3Presigner presigner = S3Presigner.builder().region(region).build()) {
+        try {
+            var builder = S3Presigner.builder().region(region);
+            if (endpointUrl != null && !endpointUrl.isBlank()) {
+                builder.endpointOverride(java.net.URI.create(endpointUrl));
+            }
 
-            PutObjectRequest objectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(objectKey)
-                    .contentType(contentType)
-                    .build();
+            try (S3Presigner presigner = builder.build()) {
+                PutObjectRequest objectRequest = PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(objectKey)
+                        .contentType(contentType)
+                        .build();
 
-            PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(10)) // Valid only for 10 minutes (security)
-                    .putObjectRequest(objectRequest)
-                    .build();
+                PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                        .signatureDuration(Duration.ofMinutes(10)) // Valid only for 10 minutes (security)
+                        .putObjectRequest(objectRequest)
+                        .build();
 
-            PresignedPutObjectRequest presignedRequest = presigner.presignPutObject(presignRequest);
+                PresignedPutObjectRequest presignedRequest = presigner.presignPutObject(presignRequest);
 
-            Map<String, String> response = new HashMap<>();
-            response.put("presignedUrl", presignedRequest.url().toString());
-            response.put("objectKey", objectKey); // Save this locally to DB post-upload
+                Map<String, String> response = new HashMap<>();
+                response.put("presignedUrl", presignedRequest.url().toString());
+                response.put("objectKey", objectKey); // Save this locally to DB post-upload
 
-            return ResponseEntity.ok(response);
+                return ResponseEntity.ok(response);
+            }
         } catch (Exception e) {
             System.err.println("Error generating S3 presigned URL: " + e.getMessage());
             return ResponseEntity.internalServerError().build();
