@@ -9,9 +9,9 @@
 
 > *“A tecnologia deve amplificar a fotografia, nunca competir com ela.”*
 
-Uma plataforma digital corporativa (*Monorepo*) projetada sob medida para um Fotógrafo e Filmmaker de padrão internacional. Composta de um **site público escalável e de alto desempenho**, ancorado a um **CMS robusto e ultra-seguro (Painel Administrativo)**.
+Uma plataforma digital corporativa (*Monorepo*) projetada sob medida para um Fotógrafo e Filmmaker de padrão internacional. Composta de um **site público escalável e de alto desempenho**, ancorado a um **CMS 2.0 robusto e ultra-seguro (Painel Administrativo Avançado)**.
 
-O design do sistema incorpora um modelo **Dark Luxury** (Pretos profundos e acentos em ouro velho Cinematic), garantindo progressão visual contínua sem comprometer a semântica, segurança ou a performance.
+O design do sistema público incorpora um padrão **Dark Luxury (Cinematic)** com **Topologia 3D Responsiva Nativa (sem WebGL)** combinando uma paleta imersiva e responsiva (Pretos profundos e acentos em ouro velho).
 
 ---
 
@@ -34,8 +34,14 @@ graph TD;
 
 1. **Frontend Público (Conversão Máxima):** HTML5 Semântico, CSS3 Modular (Vanilla com *CSS Tokens*), JavaScript Ultra Leve (Fallback System e Intersections).
 2. **Backend (A Espinha Dorsal):** *Java 21 + Spring Boot 3*. Desenhado seguindo princípios SOLID, utilizando `Controllers`, `Services`, `DTOs` e `Entities`.
-3. **Database (Estado e Modelagem):** MySQL Relacional blindado via `Flyway Migrations`. Relacionamentos complexos mapeando `Roles`, `Políticas (RBAC)`, `Portfolio` e `Eventos Live`.
+3. **Database (Estado e Modelagem):** MySQL Relacional mapeando `Roles`, `Políticas (RBAC)`, `Portfolio` e suporte integral aos módulos CMS 2.0 (`AuditLogs`, `SiteSettings`, `BookingInbox`, `Users`).
 4. **Infraestrutura / Cloud:** AWS S3 SDK e Orquestrador **Docker Compose**.
+## 🌟 O Novo CMS 2.0 Integrado
+A plataforma foi elevada a um Standard-Corporativo e dispõe de gestão autônoma do negócio diretamente pelo Fotógrafo através dos Módulos:
+- **Gerenciamento de Usuários (RBAC):** Criação de acessos seguros para 'Editores' não sobre-escreverem permissões globais.
+- **Auditoria de Segurança (Audit Trail Viewer):** Registro imutável de quem alterou algo na plataforma (Painel contra violações internas).
+- **Módulo Booking/Inbox:** Captação de orçamentos integrados visível direto no Painel com alteração de Status (Pending -> Responded).
+- **Gestor Dinâmico (Categorias & Global Settings):** Definição de URLs externas, links sociais, e tags dinâmicas via Backend em tempo real.
 
 ---
 
@@ -84,8 +90,8 @@ docker-compose up -d --build
 ## 📸 5. Entregáveis do "Prompt Master" Validados
 * [x] **Discovery e UX Flow** (`docs/ETAPA-3_UX_UI.md`)
 * [x] **Modelagem de DB, Migrations e RBAC** (`database/V1_Create...`)
-* [x] **Construção Segura da API Backend** (Filtros JWT, Controladores AWS)
-* [x] **Interfaces do Fotógrafo (Front & Admin)**
+* [x] **Construção Segura da API Backend CMS 2.0** (Users, Bookings, Settings, Módulo Audit)
+* [x] **Interfaces do Fotógrafo (Front (Redesign 3D Hero) & Admin CMS 2.0)**
 * [x] **Documentações de Proteção Cloud de App Sec** (`docs/ETAPA-8_SECURITY.md`)
 
-*Idealizado para um modelo robusto, permitindo evolução gradativa durante anos sem necessidade de reescritas monoliticas.*
+*Idealizado para um modelo robusto, permitindo evolução gradativa durante anos sem necessidade de reescritas monolíticas.*

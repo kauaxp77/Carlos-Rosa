@@ -4,20 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS — Carlos Rosa Digital</title>
+    <title>CMS 2.0 — Carlos Rosa Digital</title>
     <!-- Content Security Policy: Strict API connect to self/whitelist -->
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; connect-src 'self' http://localhost:8080 https://s3.sa-east-1.amazonaws.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Inter:wght@300;400;500&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <style>
         :root {
             --bg-deep: #0c0c0c;
-            --bg-card: #141414;
-            --border-subtle: #292929;
+            --bg-card: #121212;
+            --border-subtle: #222222;
             --text-main: #f6eedf;
-            --text-muted: #8b8b8b;
-            --accent-gold: #D4AF37;
+            --text-muted: #777777;
+            --accent-gold: #cfa832;
             --ui-font: 'Inter', sans-serif;
             --display-font: 'Cinzel', serif;
         }
@@ -37,47 +38,60 @@
             overflow: hidden;
         }
 
-        /* Sidebar Nav */
         nav {
-            width: 250px;
+            width: 260px;
             background-color: var(--bg-card);
             border-right: 1px solid var(--border-subtle);
             display: flex;
             flex-direction: column;
-            padding: 2rem 1rem;
+            padding: 2.2rem 1.2rem;
+            overflow-y: auto;
         }
 
         .brand {
             font-family: var(--display-font);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--accent-gold);
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .nav-label {
+            font-size: 0.65rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin: 1.5rem 0 0.5rem 0.5rem;
+            font-weight: 600;
         }
 
         .nav-item {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 0.8rem 1rem;
+            padding: 0.75rem 1rem;
             border-radius: 4px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+            transition: all 0.25s ease;
+            font-size: 0.85rem;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .nav-item:hover,
         .nav-item.active {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(207, 168, 50, 0.08);
             color: var(--accent-gold);
         }
 
-        /* Main Workspace */
         main {
             flex: 1;
-            padding: 3rem;
+            padding: 2.5rem 3.5rem;
             overflow-y: auto;
+            background: linear-gradient(135deg, #0c0c0c 0%, #0f0f0f 100%);
         }
 
         .header-bar {
@@ -86,13 +100,22 @@
             align-items: center;
             border-bottom: 1px solid var(--border-subtle);
             padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         h1 {
             font-family: var(--display-font);
             font-weight: 500;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        h2 {
+            font-family: var(--display-font);
+            font-weight: 500;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
         }
 
         .btn-logout {
@@ -103,17 +126,17 @@
             padding: 0.5rem 1.5rem;
             font-family: var(--ui-font);
             transition: border-color 0.3s;
+            border-radius: 2px;
         }
 
         .btn-logout:hover {
-            border-color: #D04F4F;
-            color: #D04F4F;
+            border-color: #d04f4f;
+            color: #d04f4f;
         }
 
-        /* Dashboard Overview Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3.5rem;
         }
@@ -122,69 +145,154 @@
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             padding: 1.5rem;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         .stat-value {
             font-family: var(--display-font);
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--accent-gold);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
+            line-height: 1;
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
         }
 
-        /* Upload Test Feature */
-        .upload-section {
+        .panel-box {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             padding: 2rem;
+            border-radius: 3px;
+            margin-bottom: 2rem;
         }
 
-        .upload-section h2 {
-            font-family: var(--display-font);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+        }
+
+        td {
+            color: #d1d1d1;
         }
 
         .btn-primary {
-            background: var(--accent-gold);
-            color: #000;
+            background: linear-gradient(135deg, #dfbc4f 0%, #b89326 100%);
+            color: #111;
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 0.7rem 1.5rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 1rem;
+            border-radius: 2px;
+            font-family: var(--ui-font);
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-group input {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.7rem;
+            background: #080808;
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            border-radius: 2px;
+            font-family: var(--ui-font);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
         }
     </style>
 </head>
 
 <body>
-
     <nav>
-        <div class="brand">CARLOS ROSA<br><span style="font-size:0.6rem; color:var(--text-muted)">STUDIO CMS</span>
-        </div>
-        <a class="nav-item active" onclick="navigate('dashboard')">Overview</a>
-        <a class="nav-item" onclick="navigate('portfolio')">Portfólio (CRUD)</a>
-        <a class="nav-item" onclick="navigate('library')">Media Library</a>
-        <a class="nav-item" onclick="navigate('live')">Transmissões Ao Vivo</a>
+        <div class="brand">CARLOS ROSA<br><span style="font-size:0.6rem; color:var(--text-muted)">CMS 2.0</span></div>
+
+        <div class="nav-label">General</div>
+        <a class="nav-item active" data-target="dashboard">▣ Overview</a>
+        <a class="nav-item" data-target="portfolio">📷 Portfólio (Media)</a>
+
+        <div class="nav-label">Advanced Modules</div>
+        <a class="nav-item" data-target="booking">✉️ Inbox / Quotes</a>
+        <a class="nav-item" data-target="categories">🏷️ Categorias & Tags</a>
+        <a class="nav-item" data-target="users">👥 Acessos & Usuários</a>
+        <a class="nav-item" data-target="audit">👁️ Logs de Auditoria</a>
+        <a class="nav-item" data-target="settings">⚙️ Global Settings</a>
     </nav>
 
     <main>
         <div class="header-bar">
-            <h1 id="page-title">Dashboard</h1>
-            <button class="btn-logout" onclick="logout()">Sair</button>
+            <h1 id="page-title">Overview</h1>
+            <button class="btn-logout" onclick="logout()">Sair Seguro</button>
         </div>
 
-        <div id="content-dashboard">
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="view-section active">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value">12</div>
+                    <div class="stat-value">14</div>
                     <div class="stat-label">Projetos Publicados</div>
                 </div>
                 <div class="stat-card">
@@ -192,77 +300,259 @@
                     <div class="stat-label">Mídias no S3</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">Acitvo</div>
-                    <div class="stat-label">Status Ao Vivo</div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Mensagens não lidas</div>
                 </div>
             </div>
-
-            <div class="upload-section">
-                <h2>Teste Rápido de Integeção S3 (Pre-Signed Logic)</h2>
-                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem">
-                    Simula do lado do cliente a requisição OAuth no endpoint `/api/v1/media/presigned-url` e subsequente
-                    PUT no S3,
-                    como exigido pelo documento da ETAPA 1 para economizar rede/memória do servidor backend.
+            <div class="panel-box">
+                <h2>Seja bem-vindo ao CMS 2.0</h2>
+                <p style="color:var(--text-muted); font-size:0.85rem; line-height: 1.6;">
+                    O painel foi completamente reestruturado para integrar todas as funcionalidades solicitadas da Fase
+                    4. <br>
+                    Navegue pelos módulos na barra lateral para gerenciar as configurações do site, usuários do sistema,
+                    tags e recebimentos de pedidos de orçamento.
                 </p>
-                <input type="file" id="mediaUpload" accept="image/*,video/*" style="color:var(--text-main)" />
-                <br>
-                <button class="btn-primary" onclick="simulateUploadWorkflow()">Subir Arquivo Seguro</button>
+            </div>
+        </div>
+
+        <!-- PORTFOLIO VIEW -->
+        <div id="view-portfolio" class="view-section">
+            <h2>Gerenciamento de Capas e Álbuns</h2>
+            <div class="panel-box">
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom: 2rem;">Os projetos são organizados
+                    em álbuns conectados aos buckets da AWS S3.</p>
+                <button class="btn-primary">+ Novo Álbum</button>
+            </div>
+        </div>
+
+        <!-- BOOKING / INBOX VIEW -->
+        <div id="view-booking" class="view-section">
+            <h2>Caixa de Entrada (Pedidos de Orçamento)</h2>
+            <div class="panel-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Data do Evento</th>
+                            <th>Tipo</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Adriene Souza</td>
+                            <td>15/10/2026</td>
+                            <td>Casamento</td>
+                            <td><span style="color:#d4af37">PENDING</span></td>
+                            <td>Ler Mensagem</td>
+                        </tr>
+                        <tr>
+                            <td>Marcos Almeida</td>
+                            <td>02/11/2026</td>
+                            <td>Videoclipe</td>
+                            <td><span style="color:#4caf50">RESPONDED</span></td>
+                            <td>Ler Mensagem</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CATEGORIES VIEW -->
+        <div id="view-categories" class="view-section">
+            <h2>Gestão Dinâmica de Categorias</h2>
+            <div class="panel-box">
+                <div class="input-group">
+                    <label>Nova Categoria</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" placeholder="Ex: Fotografia Noturna">
+                        <button class="btn-primary">Criar Tag</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Slug</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Casamentos</td>
+                            <td>casamentos</td>
+                            <td><span style="color:#d04f4f;cursor:pointer">Remover</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Eventos</td>
+                            <td>eventos</td>
+                            <td><span style="color:#d04f4f;cursor:pointer">Remover</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- USERS VIEW -->
+        <div id="view-users" class="view-section">
+            <h2>Acessos & Usuários Administrativos</h2>
+            <div class="panel-box">
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:2rem;">Crie contas secundárias para
+                    editores postarem fotos enquanto você foca nos eventos.</p>
+                <div class="input-group">
+                    <label>E-mail do Novo Funcionário</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="email" placeholder="nome@agencia.com">
+                        <button class="btn-primary">Gerar Acesso (EDITOR)</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>E-mail</th>
+                            <th>Função</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- AUDIT LOGS VIEW -->
+        <div id="view-audit" class="view-section">
+            <h2>Logs de Auditoria (Security Trail)</h2>
+            <div class="panel-box">
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom: 2rem;">Rastreamento imutável de
+                    todas as ações feitas neste painel.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Usuário</th>
+                            <th>Ação</th>
+                            <th>Alvo</th>
+                            <th>Detalhes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audit-table-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- GLOBAL SETTINGS -->
+        <div id="view-settings" class="view-section">
+            <h2>Configurações Globais do Site</h2>
+            <div class="panel-box">
+                <div class="input-group">
+                    <label>E-mail de Contato Principal</label>
+                    <input type="email" value="Carlosmov.contato@gmail.com">
+                </div>
+                <div class="input-group">
+                    <label>Link do Instagram</label>
+                    <input type="text" value="https://instagram.com/carloshraa">
+                </div>
+                <div class="input-group">
+                    <label>Link do WhatsApp (Wa.me)</label>
+                    <input type="text" value="https://wa.me/5561920011100">
+                </div>
+                <button class="btn-primary">Salvar Alterações</button>
             </div>
         </div>
     </main>
 
     <script>
-        // Protect dashboard
         const getToken = () => sessionStorage.getItem("jwt_token");
-        if (!getToken()) window.location.href = "login.html";
+        if (!getToken()) {
+            window.location.href = "login.html";
+        }
+
+        // View Router Logic
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                // Update Sidebar highlight
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+
+                // Update Title
+                document.getElementById('page-title').innerText = item.innerText.replace(/[^\w\sÀ-ÿ]/g, '').trim();
+
+                // Switch Panels
+                const targetViewId = 'view-' + item.getAttribute('data-target');
+                document.querySelectorAll('.view-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(targetViewId).classList.add('active');
+
+                // Load API data dynamically based on view
+                if (targetViewId === 'view-users') fetchUsers();
+                if (targetViewId === 'view-audit') fetchAuditLogs();
+            });
+        });
 
         function logout() {
             sessionStorage.removeItem("jwt_token");
             window.location.href = "login.html";
         }
 
-        function navigate(page) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('page-title').innerText = event.target.innerText;
-        }
-
-        async function simulateUploadWorkflow() {
-            const fileInput = document.getElementById('mediaUpload');
-            if (fileInput.files.length === 0) return alert('Selecione um arquivo primeiro.');
-            const file = fileInput.files[0];
-
-            alert("Iniciando Fluxo de S3 (Simulação Client-Side). Verifique o console devtools.");
-
+        async function fetchUsers() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '<tr><td colspan="4">Carregando usuários do backend...</td></tr>';
             try {
-                // 1. GET Presigned URL authenticated by JWT
-                console.log("[1] Requerendo Pre-Signed URL para: ", file.name);
-                /* Commented out real fetch for demonstration
-                const urlResponse = await fetch(`http://localhost:8080/api/v1/media/presigned-url?filename=${file.name}&contentType=${file.type}`, {
+                const res = await fetch('http://localhost:8080/api/v1/users', {
                     headers: { 'Authorization': 'Bearer ' + getToken() }
                 });
-                if (!urlResponse.ok) throw new Error('Falha RBAC ou Timeout na API Gateway');
-                const data = await urlResponse.json();
-                */
-                const data = { presignedUrl: "https://mock-s3-bucket...", objectKey: "originals/123_foto.jpg" };
+                if (!res.ok) throw new Error("Falha na autenticação (Token expirado ou sem permissão)");
+                const users = await res.json();
 
-                // 2. Direct PUT to S3 Bucket skipping Node/Java layers
-                console.log("[2] Enviando Binário direto para Cloud AWS... ", data.presignedUrl);
-                /*
-                await fetch(data.presignedUrl, {
-                    method: 'PUT',
-                    body: file,
-                    headers: { 'Content-Type': file.type }
-                });
-                */
-
-                // 3. Confirm to backend DB
-                console.log("[3] Avisando Banco MYSQL via Spring Boot que a mídia subiu: ", data.objectKey);
-                alert("Upload Cloud processado e Mídia linkada no Banco de Dados!");
-
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td style="color:#dfbc4f;font-weight:500;">${u.username}</td>
+                        <td>${u.email || '-'}</td>
+                        <td><span style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:2px;font-size:0.7rem">${u.roles.join(', ')}</span></td>
+                        <td>${u.username !== 'admin' ? `<a href="#" style="color:#d04f4f">Revogar Acesso</a>` : 'PROTEGIDO'}</td>
+                    </tr>
+                `).join('');
             } catch (err) {
-                console.error(err);
-                alert("Erro: " + err.message);
+                tbody.innerHTML = `<tr><td colspan="4" style="color:#d04f4f">Erro: ${err.message}</td></tr>`;
+            }
+        }
+
+        async function fetchAuditLogs() {
+            const tbody = document.getElementById('audit-table-body');
+            tbody.innerHTML = '<tr><td colspan="5">Lendo rastros de segurança do backend...</td></tr>';
+            try {
+                const res = await fetch('http://localhost:8080/api/v1/audit', {
+                    headers: { 'Authorization': 'Bearer ' + getToken() }
+                });
+                if (!res.ok) throw new Error("Falha na autenticação JWT");
+                const logs = await res.json();
+
+                if (logs.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5">Nenhum evento registrado ainda.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = logs.map(l => `
+                    <tr>
+                        <td style="font-size:0.75rem; color:#888">${new Date(l.timestamp).toLocaleString()}</td>
+                        <td style="color:#dfbc4f">${l.performedBy}</td>
+                        <td>${l.action}</td>
+                        <td style="font-family:monospace">${l.target}</td>
+                        <td>${l.details}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color:#d04f4f">Erro: ${err.message}</td></tr>`;
             }
         }
     </script>
