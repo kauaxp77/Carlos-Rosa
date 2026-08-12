@@ -11,18 +11,18 @@ services:
       MYSQL_USER: carlos_user
       MYSQL_PASSWORD: ${DB_PASSWORD:-mypasswordsec}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - carlos_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
 
   backend:
-    build: 
+    build:
       context: ./backend
     container_name: carlos_backend
     restart: always

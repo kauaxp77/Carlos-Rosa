@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Estratégico - Carlos Rosa</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0c0c0c;
+            --bg-card: #141414;
+            --text-main: #f6eedf;
+            --text-muted: #8b8b8b;
+            --accent-gold: #D4AF37;
+            --ui-font: 'Inter', sans-serif;
+            --display-font: 'Cinzel', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--ui-font);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            background-color: var(--bg-card);
+            padding: 3rem;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #292929;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            text-align: center;
+        }
+
+        .brand {
+            font-family: var(--display-font);
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: #080808;
+            border: 1px solid #292929;
+            color: var(--text-main);
+            font-family: var(--ui-font);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-gold);
+            color: #000;
+            border: none;
+            font-weight: 600;
+            font-family: var(--ui-font);
+            cursor: pointer;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+
+        .lbl-error {
+            color: #d9534f;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <div class="brand">CARLOS ROSA</div>
+        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom:2rem;">Acesso Administrativo ao Studio</p>
+
+        <div id="error-msg" class="lbl-error">Credenciais inválidas.</div>
+
+        <input type="text" id="username" placeholder="Usuário (admin)" value="admin" required>
+        <input type="password" id="password" placeholder="Senha (123mudar)" value="123mudar" required>
+
+        <button class="btn-login" onclick="doLogin()">Autenticar</button>
+    </div>
+
+    <script>
+        // Ao renderizar a tela limpa qualquer sessão velha
+        sessionStorage.removeItem("jwt_token");
+
+        async function doLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const errorMsg = document.getElementById("error-msg");
+            errorMsg.style.display = "none";
+
+            try {
+                // Fetch to real API Gateway exposed via NGINX (or directly mapping via container relative path)
+                const res = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username, password: password })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    sessionStorage.setItem("jwt_token", data.token); // Save secure token
+                    window.location.href = "index.html"; // Navigate to Dashboard
+                } else {
+                    errorMsg.style.display = "block";
+                    errorMsg.innerText = "Falha: Credenciais inválidas ou Banco Inacessível.";
+                }
+            } catch (error) {
+                console.error("Network Error:", error);
+                errorMsg.style.display = "block";
+                errorMsg.innerText = "Erro de rede no NGINX. API Offline.";
+            }
+        }
+    </script>
+</body>
+
+</html>

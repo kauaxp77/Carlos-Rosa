@@ -212,12 +212,13 @@
     </main>
 
     <script>
-        // Simulando fluxo de token persistido no sessionStorage
-        const getToken = () => sessionStorage.getItem("jwt_token") || "mock_token";
+        // Protect dashboard
+        const getToken = () => sessionStorage.getItem("jwt_token");
+        if (!getToken()) window.location.href = "login.html";
 
         function logout() {
             sessionStorage.removeItem("jwt_token");
-            window.location.href = "login.html"; // Assume uma rota de login simulada existiria
+            window.location.href = "login.html";
         }
 
         function navigate(page) {

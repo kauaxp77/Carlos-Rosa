@@ -2,13 +2,13 @@ spring:
   application:
     name: carlos-rosa-platform
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:carlos_rosa_db}?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:carlos_rosa_db}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: validate # Em prod usar validate, Flyway cuida da criação
+      ddl-auto: update # Allowing Hibernate to automatically catch up any missing entities from Flyway
     show-sql: false # Mudar via var ambiente p/ dev se precisar debugar
     properties:
       hibernate:
@@ -34,3 +34,6 @@ server:
   error:
     include-stacktrace: never # Security compliance: nunca vaze stacktrace no body
     include-message: always
+logging:
+  level:
+    org.springframework.security: DEBUG

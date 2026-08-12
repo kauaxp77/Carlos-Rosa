@@ -22,37 +22,45 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+        @Autowired
+        AuthenticationManager authenticationManager;
 
-    @Autowired
-    JwtUtils jwtUtils;
+        @Autowired
+        JwtUtils jwtUtils;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        @PostMapping("/login")
+        public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                Authentication authentication;
+                try {
+                        authentication = authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                                                        loginRequest.getPassword()));
+                } catch (org.springframework.security.core.AuthenticationException e) {
+                        return ResponseEntity.status(401).body(
+                                        java.util.Map.of("error", "Unauthorized Access", "message", e.getMessage()));
+                }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User userDetails = (User) authentication.getPrincipal();
+                User userDetails = (User) authentication.getPrincipal();
 
-        // Find the primary role or construct it appropriately
-        String primaryRole = userDetails.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority)
-                .orElse("ROLE_VIEWER");
+                // Find the primary role or construct it appropriately
+                String primaryRole = userDetails.getAuthorities().stream().findFirst()
+                                .map(GrantedAuthority::getAuthority)
+                                .orElse("ROLE_VIEWER");
 
-        String jwt = jwtUtils.generateJwtToken(userDetails.getUsername(), primaryRole);
+                String jwt = jwtUtils.generateJwtToken(userDetails.getUsername(), primaryRole);
 
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                List<String> roles = userDetails.getAuthorities().stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(
-                jwt,
-                0L, // ID not stored in native UserDetails, normally mapped from DB
-                userDetails.getUsername(),
-                "", // Email could be queried if needed
-                roles));
-    }
+                return ResponseEntity.ok(new JwtResponse(
+                                jwt,
+                                0L, // ID not stored in native UserDetails, normally mapped from DB
+                                userDetails.getUsername(),
+                                "", // Email could be queried if needed
+                                roles));
+        }
 }
