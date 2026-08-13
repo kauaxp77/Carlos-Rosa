@@ -46,7 +46,8 @@ public class UserService {
         String requestedRole = request.getRole() != null ? request.getRole().toUpperCase() : "VIEWER";
         Role role = roleRepository.findByName(requestedRole)
                 .orElseGet(() -> {
-                    Role newRole = new Role(requestedRole);
+                    Role newRole = new Role();
+                    newRole.setName(requestedRole);
                     return roleRepository.save(newRole);
                 });
 
