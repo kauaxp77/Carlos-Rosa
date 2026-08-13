@@ -98,36 +98,29 @@
   </section>
 
   <section id="trabalhos">
-    <div class="s-label reveal visible">Portfólio</div>
     <h2 class="s-title reveal visible">Meus trabalhos</h2>
     <div class="s-divider reveal visible"></div>
 
-    <div class="port-filters reveal visible">
-      <div class="filter-group" id="filter-categoria">
-        <span class="filter-group-label">Categoria</span>
-        <button class="filter-btn active" data-filter-cat="todos">Todos</button>
-        <button class="filter-btn" data-filter-cat="casamentos">Casamentos</button>
-        <button class="filter-btn" data-filter-cat="eventos">Eventos</button>
-      </div>
-      <div class="filter-group" id="filter-tipo">
-        <span class="filter-group-label">Tipo</span>
-        <button class="filter-btn active" data-filter-tipo="todos">Todos</button>
-        <button class="filter-btn" data-filter-tipo="fotos">Fotos</button>
-        <button class="filter-btn" data-filter-tipo="reels">Reels</button>
-        <button class="filter-btn" data-filter-tipo="realtime">Realtime</button>
-      </div>
+    <div id="portfolio-filter-bar" class="port-filters reveal visible" role="toolbar" aria-label="Filtros do portfólio">
+      <button class="filter-btn active" type="button" data-portfolio-filter="todos" aria-pressed="true">Todos</button>
+      <button class="filter-btn" type="button" data-portfolio-filter="fotos" aria-pressed="false">Fotos</button>
+      <button class="filter-btn" type="button" data-portfolio-filter="casamentos" aria-pressed="false">Casamentos</button>
+      <button class="filter-btn" type="button" data-portfolio-filter="eventos" aria-pressed="false">Eventos</button>
+      <button class="filter-btn" type="button" data-portfolio-filter="reels" aria-pressed="false">Reels</button>
+      <button class="filter-btn" type="button" data-portfolio-filter="video" aria-pressed="false">Vídeos</button>
+      <button class="filter-btn" type="button" data-portfolio-filter="realtime" aria-pressed="false">Real Time</button>
     </div>
     <div class="port-empty-msg" id="port-empty-msg">Nenhum álbum encontrado para esse filtro.</div>
 
     <div class="port-section reveal visible" id="port-fotos">
       <div class="port-section-header">
-        <span class="port-section-icon">📷</span>
+        <span class="port-section-icon" aria-hidden="true"><i data-lucide="images"></i></span>
         <span class="port-section-title">Fotos</span>
         <span class="port-section-count" id="count-fotos">7 álbuns</span>
       </div>
       <div class="albums-wrapper">
-        <button class="carousel-btn prev" onclick="scrollCarouselById('car-fotos',-1)">←</button>
-        <div class="albums-carousel" id="car-fotos">
+        <button class="carousel-btn prev" type="button" aria-label="Álbuns de fotos anteriores" onclick="scrollCarouselById('car-fotos',-1)"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+        <div class="albums-carousel" id="car-fotos" role="region" aria-label="Carrossel de fotos" tabindex="0">
           <div class="album-card reveal visible" data-cat="casamentos">
             <div class="cover">
               <img src="https://drive.google.com/thumbnail?id=1Jc9SqKGNQ5qtxMv6Fc_HVQU8eThPb22C&amp;sz=w1200"
@@ -227,7 +220,7 @@
             </div>
           </div>
         </div>
-        <button class="carousel-btn next" onclick="scrollCarouselById('car-fotos',1)">→</button>
+        <button class="carousel-btn next" type="button" aria-label="Próximos álbuns de fotos" onclick="scrollCarouselById('car-fotos',1)"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
       </div>
       <div class="carousel-dots" id="dots-fotos">
         <div class="carousel-dot active" data-car="car-fotos" data-i="0"
@@ -249,13 +242,13 @@
 
     <div class="port-section reveal visible" id="port-reels">
       <div class="port-section-header">
-        <span class="port-section-icon">🎬</span>
+        <span class="port-section-icon" aria-hidden="true"><i data-lucide="clapperboard"></i></span>
         <span class="port-section-title">Reels &amp; Vídeos</span>
         <span class="port-section-count" id="count-reels">4 álbuns</span>
       </div>
       <div class="albums-wrapper">
-        <button class="carousel-btn prev" onclick="scrollCarouselById('car-reels',-1)">←</button>
-        <div class="albums-carousel" id="car-reels">
+        <button class="carousel-btn prev" type="button" aria-label="Álbuns de reels e vídeos anteriores" onclick="scrollCarouselById('car-reels',-1)"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+        <div class="albums-carousel" id="car-reels" role="region" aria-label="Carrossel de reels e vídeos" tabindex="0">
           <div class="album-card reveal visible" data-cat="eventos">
             <div class="cover">
               <img src="https://drive.google.com/thumbnail?id=1bf9EtzUcv9dQm2quSI3yljkFKQLZYVzK&amp;sz=w1200"
@@ -313,7 +306,7 @@
             </div>
           </div>
         </div>
-        <button class="carousel-btn next" onclick="scrollCarouselById('car-reels',1)">→</button>
+        <button class="carousel-btn next" type="button" aria-label="Próximos álbuns de reels e vídeos" onclick="scrollCarouselById('car-reels',1)"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
       </div>
       <div class="carousel-dots" id="dots-reels">
         <div class="carousel-dot active" data-car="car-reels" data-i="0"
@@ -329,13 +322,13 @@
 
     <div class="port-section reveal visible" id="port-realtime">
       <div class="port-section-header">
-        <span class="port-section-icon">📡</span>
-        <span class="port-section-title">Realtime</span>
+        <span class="port-section-icon" aria-hidden="true"><i data-lucide="radio"></i></span>
+        <span class="port-section-title">Real Time</span>
         <span class="port-section-count" id="count-realtime">3 álbuns</span>
       </div>
       <div class="albums-wrapper">
-        <button class="carousel-btn prev" onclick="scrollCarouselById('car-realtime',-1)">←</button>
-        <div class="albums-carousel" id="car-realtime">
+        <button class="carousel-btn prev" type="button" aria-label="Álbuns em tempo real anteriores" onclick="scrollCarouselById('car-realtime',-1)"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+        <div class="albums-carousel" id="car-realtime" role="region" aria-label="Carrossel de álbuns em tempo real" tabindex="0">
           <div class="album-card reveal visible" data-cat="casamentos">
             <div class="cover">
               <img src="https://drive.google.com/thumbnail?id=1SmxY5wK5YZ6ov2zV61wAkWKTqctXqF5o&amp;sz=w1200"
@@ -379,7 +372,7 @@
             </div>
           </div>
         </div>
-        <button class="carousel-btn next" onclick="scrollCarouselById('car-realtime',1)">→</button>
+        <button class="carousel-btn next" type="button" aria-label="Próximos álbuns em tempo real" onclick="scrollCarouselById('car-realtime',1)"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
       </div>
       <div class="carousel-dots" id="dots-realtime">
         <div class="carousel-dot active" data-car="car-realtime" data-i="0"
@@ -483,28 +476,24 @@
   </div>
 
   <section id="ao-vivo">
-    <div class="s-label reveal visible">Diferencial</div>
-    <h2 class="s-title reveal visible">Cobertura em tempo real</h2>
-    <div class="s-divider reveal visible"></div>
-    <p class="reveal visible"
-      style="max-width:40rem;margin:0 auto;color:var(--cream-dim);font-size:.98rem;line-height:1.9">Enquanto o seu
-      evento acontece, seu público já está vendo. Entrego fotos e vídeos tratados durante a cobertura — prontos para
-      stories, feed e comunicação ao vivo.</p>
+    <h2 class="coverage-title reveal visible">Cobertura em tempo real</h2>
+    <div class="coverage-divider reveal visible"></div>
+    <p class="coverage-intro reveal visible">Enquanto o seu evento acontece, seu público já está vendo. Entrego fotos e vídeos tratados durante a cobertura — prontos para stories, feed e comunicação ao vivo.</p>
     <div class="ao-vivo-grid">
       <div class="av-card reveal visible">
-        <div class="av-icon">⏱️</div>
+        <div class="av-icon" aria-hidden="true"><i data-lucide="timer"></i></div>
         <h3>Entrega durante o evento</h3>
         <p>Fotos selecionadas e tratadas enquanto o evento ainda está rolando. Nada de esperar dias para ter o conteúdo.
         </p>
       </div>
       <div class="av-card reveal visible">
-        <div class="av-icon">📱</div>
+        <div class="av-icon" aria-hidden="true"><i data-lucide="smartphone"></i><i data-lucide="share-2"></i></div>
         <h3>Conteúdo para redes sociais</h3>
         <p>Material já formatado para stories e feed. Você posta enquanto a emoção ainda está fresca e o engajamento é
           máximo.</p>
       </div>
       <div class="av-card reveal visible">
-        <div class="av-icon">🎬</div>
+        <div class="av-icon" aria-hidden="true"><i data-lucide="camera"></i><i data-lucide="video"></i></div>
         <h3>Foto + Vídeo integrados</h3>
         <p>Cobertura completa com fotografia e filmagem. Um profissional, dois olhares — tudo documentado com qualidade.
         </p>
@@ -513,25 +502,20 @@
   </section>
 
   <section id="depoimentos">
-    <div class="s-label reveal visible">O que dizem</div>
-    <h2 class="s-title reveal visible">Clientes satisfeitos</h2>
-    <div class="s-divider reveal visible"></div>
+    <h2 class="coverage-title reveal visible">Clientes satisfeitos</h2>
     <div class="dep-grid" id="dep-grid">
       <div class="dep reveal visible">
-        <div class="dep-txt">"O Carlos foi incrível! As fotos chegaram ainda durante a festa, conseguimos postar tudo em
-          tempo real."</div>
+        <div class="dep-txt">O Carlos foi incrível! As fotos chegaram ainda durante a festa, conseguimos postar tudo em tempo real.</div>
         <div class="dep-autor">Adriene</div>
         <div class="dep-ev">Casamento </div>
       </div>
       <div class="dep reveal visible">
-        <div class="dep-txt">"Profissional, pontual e com um olhar diferenciado. As fotos do nosso casamento ficaram
-          exatamente como a gente sonhava."</div>
+        <div class="dep-txt">Profissional, pontual e com um olhar diferenciado. As fotos do nosso casamento ficaram exatamente como a gente sonhava.</div>
         <div class="dep-autor">Maria Luísa </div>
         <div class="dep-ev">Casamento </div>
       </div>
       <div class="dep reveal visible">
-        <div class="dep-txt">"Contratamos para o evento corporativo e superou todas as expectativas. Recomendo muito!"
-        </div>
+        <div class="dep-txt">Contratamos para o evento corporativo e superou todas as expectativas. Recomendo muito!</div>
         <div class="dep-autor">Natália </div>
         <div class="dep-ev">SBCP</div>
       </div>
@@ -540,13 +524,15 @@
 
   <section id="contato">
     <div class="s-label reveal visible">Vamos conversar</div>
-    <h2 class="s-title reveal visible">Seu evento<br>merece ser lembrado.</h2>
-    <div class="s-divider reveal visible"></div>
-    <p class="contato-sub reveal visible">Entre em contato e vamos criar algo incrível juntos.</p>
-    <div class="contato-links reveal visible">
-      <a id="link-whatsapp" href="https://wa.me/5561920011100" class="c-link" target="_blank">📱 WhatsApp</a>
-      <a id="link-instagram" href="https://instagram.com/carloshraa" class="c-link" target="_blank">📷 Instagram</a>
-      <a id="link-email" href="mailto:Carlosmov.contato@gmail.com" class="c-link">✉️ E-mail</a>
+    <div class="contact-content">
+      <h2 class="s-title reveal visible">Seu evento<br>merece ser lembrado.</h2>
+      <div class="s-divider reveal visible"></div>
+      <p class="contato-sub reveal visible">Entre em contato e vamos criar algo incrível juntos.</p>
+      <div class="contato-links reveal visible">
+        <a id="link-whatsapp" href="https://wa.me/5561920011100" class="c-link" target="_blank" rel="noreferrer"><i data-lucide="message-circle" aria-hidden="true"></i><span>WhatsApp</span></a>
+        <a id="link-instagram" href="https://instagram.com/carloshraa" class="c-link" target="_blank" rel="noreferrer"><i data-lucide="camera" aria-hidden="true"></i><span>Instagram</span></a>
+        <a id="link-email" href="mailto:Carlosmov.contato@gmail.com" class="c-link"><i data-lucide="mail" aria-hidden="true"></i><span>E-mail</span></a>
+      </div>
     </div>
   </section>
 
@@ -2617,6 +2603,7 @@
     </div>
   </div>
 
+  <script src="https://unpkg.com/lucide@latest" defer></script>
   <script src="./main.js" defer></script>
 
 

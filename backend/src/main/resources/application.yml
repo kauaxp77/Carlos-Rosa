@@ -16,6 +16,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    locations: filesystem:/app/migrations
 
 # Variáveis Customizadas (Carregadas por ENV vars via Docker)
 app:
