@@ -299,26 +299,35 @@ function isVideo(url) {
 // ═══════════════════════════════════════════════════════
 // RENDERIZA GRID DE ÁLBUNS
 // ═══════════════════════════════════════════════════════
+function hydrateLucideIcons() {
+  if (window.lucide) lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+}
+
 function buildAlbumCard(alb, globalIdx) {
   const card = document.createElement('div');
   card.className = 'album-card reveal';
   card.dataset.cat = alb.categoria;
   const capaUrl = alb.capa ? driveUrl(alb.capa) : '';
   const count = alb.midias.filter(m => m).length;
-  const isVid = alb.tipo !== 'fotos';
-  const icon = alb.tipo === 'realtime' ? '📡' : (isVid ? '🎬' : '📷');
-  const label = alb.tipo === 'realtime' ? '▶ Realtime' : (isVid ? '▶ Reel' : count + ' fotos');
+  const isVideo = alb.tipo === 'video';
+  const isReel = isVideo && alb.midias.some(media => /youtube\.com\/shorts/i.test(media));
+  const format = alb.tipo === 'realtime' ? 'realtime' : (isVideo ? (isReel ? 'reels' : 'video') : 'fotos');
+  const label = alb.tipo === 'realtime' ? 'Real Time' : (isVideo ? (isReel ? 'Reel' : 'Vídeo') : 'Fotos');
+  const labelIcon = alb.tipo === 'realtime' ? 'radio' : (isVideo ? 'video' : 'camera');
+  const itemLabel = count === 1 ? 'item' : 'itens';
+  card.dataset.type = alb.tipo;
+  card.dataset.format = format;
   card.innerHTML = `
     <div class="cover">
       ${capaUrl
         ? `<img src="${capaUrl}" alt="${alb.titulo}" loading="lazy">`
-        : `<div class="cover-placeholder"><span>${icon}</span>${alb.titulo}</div>`}
-      ${count > 0 ? `<div class="album-count">${label}</div>` : ''}
-      <div class="album-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        : `<div class="cover-placeholder"><i data-lucide="image" aria-hidden="true"></i><span>${alb.titulo}</span></div>`}
+      <div class="album-count"><i data-lucide="${labelIcon}" aria-hidden="true"></i><span>${label}</span></div>
+      <div class="album-play"><i data-lucide="play" aria-hidden="true"></i></div>
     </div>
     <div class="album-info">
       <div class="album-titulo">${alb.titulo}</div>
-      <div class="album-meta">${alb.categoria}</div>
+      <div class="album-meta">${alb.categoria} · ${count} ${itemLabel}</div>
     </div>`;
   card.addEventListener('click', () => abrirAlbum(globalIdx));
   return card;
@@ -346,6 +355,8 @@ function renderAlbums() {
   document.getElementById('port-reels').style.display    = cReels    ? '' : 'none';
   document.getElementById('port-realtime').style.display = cReal     ? '' : 'none';
 
+  hydrateLucideIcons();
+
   renderDots('car-fotos','dots-fotos');
   renderDots('car-reels','dots-reels');
   renderDots('car-realtime','dots-realtime');
@@ -359,27 +370,23 @@ function renderAlbums() {
   applyPortfolioFilters();
 }
 
-// --- Filtro de portfólio (categoria + tipo) ---
-let currentFilterCat = 'todos';
-let currentFilterTipo = 'todos';
-
-const TIPO_POR_SECAO = { 'port-fotos': 'fotos', 'port-reels': 'reels', 'port-realtime': 'realtime' };
+// --- Filtro de portfólio ---
+let activePortfolioFilter = 'todos';
 
 function applyPortfolioFilters() {
-  const sections = document.querySelectorAll('.port-section');
+  const sections = document.querySelectorAll('#trabalhos .port-section');
   let anyVisible = false;
 
   sections.forEach(section => {
-    const tipoSecao = TIPO_POR_SECAO[section.id];
-    const tipoMatchSecao = currentFilterTipo === 'todos' || currentFilterTipo === tipoSecao;
-
     const cards = section.querySelectorAll('.album-card');
     let visibleInSection = 0;
 
     cards.forEach(card => {
-      const cat = card.dataset.cat || '';
-      const catMatch = currentFilterCat === 'todos' || cat === currentFilterCat;
-      const show = tipoMatchSecao && catMatch;
+      const matchesFilter = activePortfolioFilter === 'todos'
+        || card.dataset.cat === activePortfolioFilter
+        || card.dataset.type === activePortfolioFilter
+        || card.dataset.format === activePortfolioFilter;
+      const show = matchesFilter;
       card.classList.toggle('filtered-out', !show);
       if (show) visibleInSection++;
     });
@@ -398,20 +405,15 @@ function applyPortfolioFilters() {
 }
 
 function initPortfolioFilters() {
-  document.querySelectorAll('#filter-categoria .filter-btn').forEach(btn => {
+  document.querySelectorAll('#portfolio-filter-bar .filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('#filter-categoria .filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#portfolio-filter-bar .filter-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
-      currentFilterCat = btn.dataset.filterCat;
-      applyPortfolioFilters();
-    });
-  });
-
-  document.querySelectorAll('#filter-tipo .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('#filter-tipo .filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilterTipo = btn.dataset.filterTipo;
+      btn.setAttribute('aria-pressed', 'true');
+      activePortfolioFilter = btn.dataset.portfolioFilter;
       applyPortfolioFilters();
     });
   });
@@ -424,7 +426,7 @@ function renderDots(carId, dotsId) {
   const cards = car.querySelectorAll('.album-card');
   if (cards.length <= 1) { dots.innerHTML=''; return; }
   dots.innerHTML = Array.from({length: cards.length}, (_,i) =>
-    `<div class="carousel-dot ${i===0?'active':''}" data-car="${carId}" data-i="${i}" onclick="goToSlide('${carId}','${dotsId}',${i})"></div>`
+    `<button class="carousel-dot ${i===0?'active':''}" type="button" aria-label="Ir para o álbum ${i + 1}" data-car="${carId}" data-i="${i}" onclick="goToSlide('${carId}','${dotsId}',${i})"></button>`
   ).join('');
 }
 
@@ -439,7 +441,8 @@ function goToSlide(carId, dotsId, idx) {
 function scrollCarouselById(carId, dir) {
   const car = document.getElementById(carId);
   const card = car.querySelector('.album-card');
-  const w = card ? card.offsetWidth + 19 : 300;
+  const gap = parseFloat(getComputedStyle(car).gap) || 16;
+  const w = card ? card.offsetWidth + gap : 300;
   car.scrollBy({ left: dir * w, behavior:'smooth' });
   setTimeout(() => syncDots(carId), 350);
 }
@@ -469,12 +472,29 @@ function initSwipe(carId) {
     const dx = e.changedTouches[0].clientX - sx;
     if(Math.abs(dx)>40) scrollCarouselById(carId, dx<0?1:-1);
   },{passive:true});
-  let mx=0, mDragging=false;
-  el.addEventListener('mousedown',e=>{mx=e.clientX;mDragging=true;el.classList.add('dragging');});
-  window.addEventListener('mouseup',e=>{
-    if(!mDragging) return;
-    const dx=e.clientX-mx; mDragging=false; el.classList.remove('dragging');
-    if(Math.abs(dx)>40) scrollCarouselById(carId, dx<0?1:-1);
+  let mouseStartX=0, mouseStartScroll=0, mouseDragging=false;
+  el.addEventListener('mousedown', event => {
+    if (event.button !== 0) return;
+    mouseStartX = event.clientX;
+    mouseStartScroll = el.scrollLeft;
+    mouseDragging = true;
+    el.classList.add('dragging');
+    event.preventDefault();
+  });
+  window.addEventListener('mousemove', event => {
+    if (!mouseDragging) return;
+    el.scrollLeft = mouseStartScroll - (event.clientX - mouseStartX);
+  });
+  window.addEventListener('mouseup', () => {
+    if (!mouseDragging) return;
+    mouseDragging = false;
+    el.classList.remove('dragging');
+    syncDots(carId);
+  });
+  el.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    scrollCarouselById(carId, event.key === 'ArrowRight' ? 1 : -1);
   });
   el.addEventListener('scroll',()=>syncDots(carId),{passive:true});
 }
@@ -631,7 +651,7 @@ function renderDep() {
   const grid = document.getElementById('dep-grid');
   grid.innerHTML = depoimentos.map(d => `
     <div class="dep reveal visible">
-      <div class="dep-txt">"${d.texto}"</div>
+      <div class="dep-txt">${d.texto}</div>
       <div class="dep-autor">${d.autor}</div>
       <div class="dep-ev">${d.evento}</div>
     </div>`).join('');
@@ -962,3 +982,4 @@ aplicarContatos();
 initPortfolioFilters();
 renderAlbums();
 renderDep();
+hydrateLucideIcons();

@@ -4,19 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Estratégico - Carlos Rosa</title>
+    <title>Acesso Administrativo - Carlos Rosa</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #0c0c0c;
-            --bg-card: #141414;
-            --text-main: #f6eedf;
-            --text-muted: #8b8b8b;
-            --accent-gold: #D4AF37;
+            --bg-deep: #0b0b0b;
+            --card-deep: #171819;
+            --card-mid: #202123;
+            --text-main: #ede5d7;
+            --text-muted: #a6a4a0;
+            --gold-light: #ead58d;
+            --gold: #c5a059;
+            --gold-deep: #79541e;
+            --espresso: #281a09;
             --ui-font: 'Inter', sans-serif;
-            --display-font: 'Cinzel', serif;
+            --display-font: 'Playfair Display', serif;
         }
 
         * {
@@ -26,93 +30,402 @@
         }
 
         body {
+            min-height: 100svh;
+            overflow-x: hidden;
+            padding: clamp(2rem, 6vh, 5rem) 1.25rem;
             background-color: var(--bg-deep);
+            background-image:
+                linear-gradient(90deg, rgba(8, 7, 5, 0.9) 0%, rgba(8, 7, 5, 0.74) 40%, rgba(8, 8, 8, 0.48) 100%),
+                linear-gradient(180deg, rgba(5, 5, 5, 0.14) 0%, rgba(5, 5, 5, 0.68) 100%),
+                url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=2400&q=90');
+            background-position: center, center, 62% center;
+            background-repeat: no-repeat;
+            background-size: cover;
             color: var(--text-main);
             font-family: var(--ui-font);
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            position: relative;
         }
 
-        .login-card {
-            background-color: var(--bg-card);
-            padding: 3rem;
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 48% 44% at 47% 47%, transparent 0%, rgba(0, 0, 0, 0.16) 67%, rgba(0, 0, 0, 0.62) 100%),
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 5px);
+            mix-blend-mode: normal;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .login-shell {
             width: 100%;
-            max-width: 420px;
-            border: 1px solid #292929;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            max-width: 610px;
             text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: reveal-login 700ms cubic-bezier(0.16, 0.8, 0.24, 1) both;
         }
 
         .brand {
             font-family: var(--display-font);
-            font-size: 1.8rem;
-            color: var(--accent-gold);
-            margin-bottom: 2rem;
-            letter-spacing: 2px;
+            font-size: clamp(2.25rem, 6vw, 3.35rem);
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: 0.075em;
+            margin: 0 0 1.05rem;
+            background: linear-gradient(180deg, #f6e7a8 0%, #d7b866 44%, #8b651f 80%, #e0c979 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 1px 0 rgba(255, 243, 192, 0.25), 0 4px 16px rgba(0, 0, 0, 0.78);
+        }
+
+        .login-card {
+            isolation: isolate;
+            overflow: hidden;
+            padding: clamp(1.8rem, 5vw, 3rem) clamp(1.25rem, 6vw, 4rem) clamp(1.5rem, 4vw, 2.45rem);
+            border: 1px solid rgba(235, 211, 139, 0.8);
+            border-radius: 12px;
+            background:
+                linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0%, transparent 33%, rgba(0, 0, 0, 0.17) 74%, rgba(255, 255, 255, 0.025) 100%),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, rgba(0, 0, 0, 0.03) 1px 3px, transparent 3px 6px),
+                linear-gradient(145deg, #242527 0%, #1a1b1c 50%, #131415 100%);
+            box-shadow:
+                0 0 0 4px rgba(14, 14, 14, 0.84),
+                0 0 0 5px rgba(180, 146, 76, 0.5),
+                0 0 0 7px rgba(8, 8, 8, 0.85),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.74),
+                0 27px 54px rgba(0, 0, 0, 0.66);
+            backdrop-filter: blur(7px);
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            z-index: -1;
+            border: 1px solid rgba(255, 244, 199, 0.22);
+            border-radius: 8px;
+            box-shadow: inset 0 0 22px rgba(224, 190, 102, 0.03);
+            pointer-events: none;
+        }
+
+        .login-card::after {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            pointer-events: none;
+            width: 65%;
+            height: 130%;
+            top: -53%;
+            left: -31%;
+            transform: rotate(17deg);
+            background: linear-gradient(90deg, transparent, rgba(255, 238, 185, 0.04), transparent);
+        }
+
+        .login-subtitle {
+            color: #c4b8a0;
+            font-size: clamp(1rem, 2.2vw, 1.32rem);
+            font-weight: 400;
+            line-height: 1.3;
+            margin: 0 0 clamp(1.65rem, 4vw, 2.3rem);
+            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85);
+        }
+
+        .login-form {
+            display: grid;
+            gap: 1.35rem;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 46px minmax(0, 1fr);
+            align-items: end;
+            column-gap: 0.95rem;
+            text-align: left;
+        }
+
+        .field-icon {
+            height: 62px;
+            display: grid;
+            place-items: center;
+            color: var(--gold-light);
+            filter: drop-shadow(0 1px 0 rgba(42, 26, 4, 0.9));
+        }
+
+        .field-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke-width: 1.6;
+        }
+
+        .field-control {
+            min-width: 0;
+        }
+
+        .field-control label {
+            display: block;
+            margin: 0 0 0.48rem 0.68rem;
+            color: #bcb7ab;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+        }
+
+        .input-wrap {
+            position: relative;
         }
 
         input {
             width: 100%;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background: #080808;
-            border: 1px solid #292929;
-            color: var(--text-main);
-            font-family: var(--ui-font);
+            height: 62px;
+            padding: 0 3.75rem 0 1.15rem;
+            border: 1px solid #3f4144;
+            border-radius: 8px;
             outline: none;
-            transition: border-color 0.3s;
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.37), transparent 45%),
+                #141516;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.78), inset 0 -1px 0 rgba(255, 255, 255, 0.035), 0 1px 0 rgba(255, 255, 255, 0.04);
+            color: #dec87f;
+            font-size: clamp(1rem, 2.4vw, 1.34rem);
+            font-weight: 500;
+            caret-color: var(--gold-light);
+            transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+        }
+
+        input::placeholder {
+            color: #77736a;
+            opacity: 1;
         }
 
         input:focus {
-            border-color: var(--accent-gold);
+            border-color: rgba(223, 190, 104, 0.84);
+            background-color: #171819;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.72), 0 0 0 3px rgba(197, 160, 89, 0.13), 0 0 16px rgba(197, 160, 89, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 0.35rem;
+            width: 48px;
+            height: 48px;
+            transform: translateY(-50%);
+            display: grid;
+            place-items: center;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: #a99f83;
+            cursor: pointer;
+            transition: color 180ms ease, background 180ms ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--gold-light);
+            background: rgba(197, 160, 89, 0.08);
+        }
+
+        .password-toggle:focus-visible,
+        .btn-login:focus-visible {
+            outline: 2px solid var(--gold-light);
+            outline-offset: 3px;
+        }
+
+        .password-toggle svg {
+            width: 27px;
+            height: 27px;
+            stroke-width: 1.65;
         }
 
         .btn-login {
-            width: 100%;
-            padding: 1rem;
-            background: var(--accent-gold);
-            color: #000;
-            border: none;
-            font-weight: 600;
-            font-family: var(--ui-font);
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            width: calc(100% - 61px);
+            min-height: 65px;
+            margin: 0 0 0 auto;
+            border: 1px solid rgba(255, 225, 139, 0.84);
+            border-radius: 10px;
+            background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 17%, rgba(255, 248, 200, 0.16) 49%, transparent 83%, rgba(62, 33, 2, 0.14)),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, rgba(53, 27, 1, 0.04) 1px 3px),
+                linear-gradient(180deg, #d8b767 0%, #b48737 48%, #805a20 100%);
+            box-shadow: inset 0 2px 1px rgba(255, 244, 193, 0.66), inset 0 -3px 4px rgba(63, 34, 1, 0.55), 0 3px 0 #251604, 0 7px 13px rgba(0, 0, 0, 0.53);
+            color: var(--espresso);
             cursor: pointer;
-            transition: opacity 0.3s;
+            font-family: var(--ui-font);
+            font-size: clamp(1.12rem, 3.2vw, 1.55rem);
+            font-weight: 700;
+            letter-spacing: 0.025em;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            text-shadow: 0 1px rgba(255, 238, 175, 0.28);
+            transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            inset: 1px 10% 56% 10%;
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(255, 250, 209, 0.31), transparent);
+            pointer-events: none;
         }
 
         .btn-login:hover {
-            opacity: 0.9;
+            filter: brightness(1.08) saturate(1.04);
+            box-shadow: inset 0 2px 1px rgba(255, 244, 193, 0.72), inset 0 -3px 4px rgba(63, 34, 1, 0.5), 0 3px 0 #251604, 0 10px 20px rgba(0, 0, 0, 0.52), 0 0 17px rgba(214, 174, 79, 0.15);
+        }
+
+        .btn-login:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 2px 4px rgba(70, 39, 1, 0.58), 0 1px 0 #251604, 0 3px 8px rgba(0, 0, 0, 0.5);
         }
 
         .lbl-error {
-            color: #d9534f;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
             display: none;
+            margin: -0.3rem 0 0 61px;
+            color: #f19b8e;
+            font-size: 0.8rem;
+            line-height: 1.45;
+            text-align: left;
+        }
+
+        @keyframes reveal-login {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 2rem 1rem;
+                background-position: center, center, 66% center;
+            }
+
+            .brand {
+                font-size: 2.2rem;
+            }
+
+            .login-card {
+                padding: 1.7rem 1.15rem 1.45rem;
+            }
+
+            .login-form {
+                gap: 1.15rem;
+            }
+
+            .field-row {
+                grid-template-columns: 37px minmax(0, 1fr);
+                column-gap: 0.62rem;
+            }
+
+            .field-icon {
+                height: 58px;
+            }
+
+            .field-icon svg {
+                width: 25px;
+                height: 25px;
+            }
+
+            input {
+                height: 58px;
+                padding-left: 0.9rem;
+            }
+
+            .btn-login {
+                width: calc(100% - 43px);
+                min-height: 59px;
+            }
+
+            .lbl-error {
+                margin-left: 43px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="login-card">
-        <div class="brand">CARLOS ROSA</div>
-        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom:2rem;">Acesso Administrativo ao Studio</p>
+    <main class="login-shell">
+        <h1 class="brand">CARLOS ROSA</h1>
+        <section class="login-card" aria-labelledby="login-title">
+            <p id="login-title" class="login-subtitle">Acesso Administrativo ao Studio</p>
 
-        <div id="error-msg" class="lbl-error">Credenciais inválidas.</div>
+            <form class="login-form" onsubmit="event.preventDefault(); doLogin();">
+                <div class="field-row">
+                    <span class="field-icon" aria-hidden="true"><i data-lucide="user-round"></i></span>
+                    <div class="field-control">
+                        <label for="username">NOME DE USUÁRIO</label>
+                        <div class="input-wrap">
+                            <input type="text" id="username" autocomplete="username" autocapitalize="none" value="admin" required>
+                        </div>
+                    </div>
+                </div>
 
-        <input type="text" id="username" placeholder="Usuário (admin)" value="admin" required>
-        <input type="password" id="password" placeholder="Senha (123mudar)" value="123mudar" required>
+                <div class="field-row">
+                    <span class="field-icon" aria-hidden="true"><i data-lucide="key-round"></i></span>
+                    <div class="field-control">
+                        <label for="password">SENHA</label>
+                        <div class="input-wrap">
+                            <input type="password" id="password" autocomplete="current-password" value="123mudar" required>
+                            <button id="password-toggle" class="password-toggle" type="button" aria-label="Mostrar senha" aria-pressed="false">
+                                <i data-lucide="eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-        <button class="btn-login" onclick="doLogin()">Autenticar</button>
-    </div>
+                <div id="error-msg" class="lbl-error" role="alert" aria-live="polite">Credenciais inválidas.</div>
+                <button class="btn-login" type="submit">Autenticar</button>
+            </form>
+        </section>
+    </main>
 
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         // Ao renderizar a tela limpa qualquer sessão velha
         sessionStorage.removeItem("jwt_token");
+
+        if (window.lucide) {
+            lucide.createIcons({ attrs: { 'stroke-width': 1.7 } });
+        }
+
+        document.getElementById("password-toggle").addEventListener("click", () => {
+            const passwordInput = document.getElementById("password");
+            const toggle = document.getElementById("password-toggle");
+            const isHidden = passwordInput.type === "password";
+
+            passwordInput.type = isHidden ? "text" : "password";
+            toggle.setAttribute("aria-pressed", String(isHidden));
+            toggle.setAttribute("aria-label", isHidden ? "Ocultar senha" : "Mostrar senha");
+        });
 
         async function doLogin() {
             const username = document.getElementById("username").value;
