@@ -1,22 +1,31 @@
-# Node, Build, Environments
-node_modules/
-dist/
-.env
-.env.*.local
-.DS_Store
-
-# IDEs
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Java/Spring Boot
+# Java / Maven
 target/
 *.class
 *.jar
 *.war
 .mvn/
+
+# Node
+node_modules/
+dist/
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Logs e temporários
+*.log
+tmp.txt
+
+# IDEs e sistema operacional
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
 
 # Docker overrides
 docker-compose.override.yml
